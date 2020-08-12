@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+USER_NAME=${USER_NAME:-user}
+
+if [ -z "$USER_PASSWORD" ]; then
+	exit 1
+else
+	echo "$USER_NAME:$USER_PASSWORD" | chpasswd
+fi
+
+chsh -s `which bash` "$USER_NAME"
+echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
+echo 'PermitRootLogin yes' > /etc/ssh/sshd_config
