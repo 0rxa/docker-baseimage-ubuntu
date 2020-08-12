@@ -84,7 +84,9 @@ RUN \
  echo "**** install packages ****" && \
  apt-get install -y \
 	curl \
-	tzdata && \
+	tzdata \
+	sudo openssh-server \
+	&& \
  echo "**** generate locale ****" && \
  locale-gen en_US.UTF-8 && \
  echo "**** add s6 overlay ****" && \
