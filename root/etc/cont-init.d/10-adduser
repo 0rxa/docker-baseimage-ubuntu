@@ -1,10 +1,18 @@
 #!/usr/bin/with-contenv bash
 
+USER_NAME=${USER_NAME:-user}
+
 PUID=${PUID:-911}
 PGID=${PGID:-911}
 
-groupmod -o -g "$PGID" abc
-usermod -o -u "$PUID" abc
+[[ "$USER_NAME" != "abc" ]] && \
+    mkdir -p "/home/$USER_NAME" && \
+    usermod -l "$USER_NAME" abc && \
+    groupmod -n "$USER_NAME" abc && \
+    usermod -d "/home/$USER_NAME" $USER_NAME
+
+groupmod -o -g "$PGID" "$USER_NAME"
+usermod -o -u "$PUID" "$USER_NAME"
 
 echo '
 -------------------------------------
@@ -16,23 +24,16 @@ echo '
 
 
 Brought to you by linuxserver.io
--------------------------------------'
-if [[ -f /donate.txt ]]; then
-    echo '
-To support the app dev(s) visit:'
-    cat /donate.txt
-fi
-echo '
-To support LSIO projects visit:
+We gratefully accept donations at:
 https://www.linuxserver.io/donate/
 -------------------------------------
 GID/UID
 -------------------------------------'
 echo "
-User uid:    $(id -u abc)
-User gid:    $(id -g abc)
+User uid:    $(id -u "$USER_NAME")
+User gid:    $(id -g "$USER_NAME")
 -------------------------------------
 "
-chown abc:abc /app
-chown abc:abc /config
-chown abc:abc /defaults
+chown "$USER_NAME":"$USER_NAME" /app
+chown "$USER_NAME":"$USER_NAME" /config
+chown "$USER_NAME":"$USER_NAME" /defaults
