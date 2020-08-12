@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+mkdir /run/sshd
+mkdir -p /config/logs/openssh/
+/usr/sbin/sshd -D -e -E /config/logs/openssh/openssh.log
